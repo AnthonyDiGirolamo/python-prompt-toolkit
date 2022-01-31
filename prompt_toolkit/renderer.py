@@ -704,6 +704,10 @@ class Renderer:
         self._last_size = size
         self.mouse_handlers = mouse_handlers
 
+        # Handle cursor shapes.
+        output.set_cursor_shape(app.cursor_shape_config.get_cursor_shape(app))
+
+        # Flush buffered output.
         output.flush()
 
         # Set visible windows in layout.

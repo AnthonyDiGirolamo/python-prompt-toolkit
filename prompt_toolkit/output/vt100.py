@@ -26,6 +26,7 @@ from typing import (
     cast,
 )
 
+from prompt_toolkit.cursor_shapes import CursorShape
 from prompt_toolkit.data_structures import Size
 from prompt_toolkit.output import Output
 from prompt_toolkit.styles import ANSI_COLOR_NAMES, Attrs
@@ -661,6 +662,18 @@ class Vt100_Output(Output):
 
     def show_cursor(self) -> None:
         self.write_raw("\x1b[?12l\x1b[?25h")  # Stop blinking cursor and show.
+
+    def set_cursor_shape(self, cursor_shape: CursorShape) -> None:
+        self.write_raw(
+            {
+                CursorShape.BLOCK: "\x1b[\x32 q",
+                CursorShape.BEAM: "\x1b[\x36 q",
+                CursorShape.UNDERLINE: "\x1b[\x34 q",
+                CursorShape.BLINKING_BLOCK: "\x1b[\x30 q",
+                CursorShape.BLINKING_BEAM: "\x1b[\x35 q",
+                CursorShape.BLINKING_UNDERLINE: "\x1b[\x33 q",
+            }.get(cursor_shape, "")
+        )
 
     def flush(self) -> None:
         """
